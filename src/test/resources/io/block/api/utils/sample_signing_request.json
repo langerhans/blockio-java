@@ -1,0 +1,22 @@
+{
+  "status": "success",
+  "data": {
+    "reference_id": "d04c858228ae03eaf989834650dd267098e2eb9c19e2445d221e2bfee9b28ab6",
+    "more_signatures_needed": true,
+    "inputs": [{
+      "input_no": 0,
+      "signatures_needed": 1,
+      "data_to_sign": "695369676e65645468697344617461546861744973323536426974734c6f6e67",
+      "signers": [{
+        "signer_address": "DHG2A8KNhsKHmHmkgPJms1APvQBYnf4euC",
+        "signer_public_key": "03359ac0aa241b1a40fcab68486f8a4b546ad3301d201c3645487093578592ec8f",
+        "signed_data": null
+      }]
+    }],
+    "encrypted_passphrase": {
+      "signer_address": "xxx",
+      "signer_public_key": "03359ac0aa241b1a40fcab68486f8a4b546ad3301d201c3645487093578592ec8f",
+      "passphrase": "I6CHBbKh1+kyP0YveNYa9g=="
+    }
+  }
+}
