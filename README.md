@@ -27,7 +27,7 @@ Include the library in your `pom.xml`:
   <version>1.0-SNAPSHOT</version>
 </dependency>
 ```  
-See [SampleClient.java](src\main\java\io\block\api\SampleClient.java) for a few examples of usage. See below for docs on what you can do.
+See [SampleClient.java](src/main/java/io/block/api/SampleClient.java) for a few examples of usage. See below for docs on what you can do.
 
 Documentation
 ---
