@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-// TODO Most of these fail or are false positives, but the signing works fine... Such lazy, many not wow... Are the test vectors correct??
 public class SigningUtilsTest extends TestCase {
 
     public void testPinToKey() throws Exception {
@@ -28,9 +27,9 @@ public class SigningUtilsTest extends TestCase {
 
 
     public void testDecrypt() throws Exception {
-        String input = "block.io";
-        byte[] key = SigningUtils.fromHex("9a292db5193b18aee4fcff41025d2abecbff45288d09660befe25ef2edd53523");
-        byte[] enc = Base64.decode("wq2vFFLsn2wB1DUipnEGkw==");
+        String input = "I'm a little tea pot short and stout";
+        byte[] key = Base64.decode("0EeMOVtm5YihUYzdCNgleqIUWkwgvNBcRmr7M0t9GOc=");
+        byte[] enc = Base64.decode("7HTfNBYJjq09+vi8hTQhy6lCp3IHv5rztNnKCJ5RB7cSL+NjHrFVv1jl7qkxJsOg");
 
         byte[] generatedEnc = SigningUtils.encryptPassphrase(input, key);
         byte[] generatedInput = SigningUtils.decryptPassphrase(generatedEnc, key);
@@ -73,14 +72,13 @@ public class SigningUtilsTest extends TestCase {
     public void testComplete() throws Exception {
         String dataToSign = "695369676e65645468697344617461546861744973323536426974734c6f6e67";
         String pin = "bc4779ff545bc04a54e6c32b7609a91b";
-        String pass = "28+OsMzlhUYyVJ9PUlmZ+Q==";
-        String signedData = "304402205587dfc87c3227ad37b021c08c873ca4b1faada1a83f666d483711edb2f4f743022004ee40d9fe8dd03e6d42bfc7d0e53f75286125a591ed14b39265978ebf3eea36";
+        String pass = "x1pjDH1ptfB4uKRAF4k9HThMEckOA0loBOrhmXOLt51iSHZm5qS9cX8HqDm6dGliByLbcgT+kmGDuNcVhwP/S2pqQ2LXkV2iERRQmq4E5rY=";
 
-        byte[] privKey =
-                SigningUtils.getPrivKey(
-                        SigningUtils.decryptPassphrase(
-                                Base64.decode(pass),
-                                SigningUtils.pinToKey(pin)));
+        String signedData = "3045022100ed12a43f75e4df23f1c53a4a90b91d94251bce359c720c43b5d88bbdfc3f23240220563d2ff61f4dfdae708e193673c168bf3c4b76e9279977c8766f9b162338d7c0";
+
+        byte[] privKey = SigningUtils.getPrivKeyFromPassphrase(
+            Base64.decode(pass),
+            SigningUtils.pinToKey(pin));
 
         String generatedSignedData = SigningUtils.signData(dataToSign, privKey);
 
@@ -90,11 +88,11 @@ public class SigningUtilsTest extends TestCase {
     public void testFromFile() throws Exception {
         String request = new String( Files.readAllBytes(Paths.get(SigningUtilsTest.class.getResource("sample_signing_request.json").toURI())));
         String response = new String( Files.readAllBytes(Paths.get(SigningUtilsTest.class.getResource("sample_signing_response.json").toURI())));
-        Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         Response.ResponseWithdrawSignRequest signResquestR = gson.fromJson(request, Response.ResponseWithdrawSignRequest.class);
         WithdrawSignRequest signResquest = signResquestR.withdrawSignRequest;
 
-        signResquest = SigningUtils.signWithdrawalRequest(signResquest, "64c8c9d431f693c8d76e8ee2b3020e0f");
+        signResquest = SigningUtils.signWithdrawalRequest(signResquest, "bc4779ff545bc04a54e6c32b7609a91b");
 
         assertEquals(response, gson.toJson(signResquest, WithdrawSignRequest.class));
     }

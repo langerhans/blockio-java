@@ -31,11 +31,10 @@ public class SigningUtils {
 
     public static WithdrawSignRequest signWithdrawalRequest(WithdrawSignRequest request, String secretPin) throws BlockIOException {
 
-        byte[] privKey =
-                getPrivKey(
-                    decryptPassphrase(
-                            Base64.decode(request.encryptedPassphrase.passphrase),
-                            pinToKey(secretPin)));
+        byte[] privKey = getPrivKeyFromPassphrase(
+            Base64.decode(request.encryptedPassphrase.passphrase),
+            pinToKey(secretPin));
+
         byte[] generatedPubKey = SigningUtils.derivePublicKey(privKey);
         for (Input input : request.inputs) {
             for (Signer signer : input.signers) {
@@ -83,9 +82,24 @@ public class SigningUtils {
         CipherParameters aesKey = new KeyParameter(key);
         aes.init(false, aesKey);
         try {
-            return fromHex(new String(cipherData(aes, pass), "UTF-8"));
+            return cipherData(aes, pass);
         } catch (InvalidCipherTextException e) {
             throw new BlockIOException("Unexpected error while signing transaction. Please file an issue report.");
+        }
+    }
+
+    /**
+     * Wrapper for getting a private key from an encrypted passphrase
+     * and encryption key combination
+     * @param encryptedPassphrase the encrypted passphrase
+     * @param key the secret key
+     * @return private key
+     * @throws BlockIOException
+     */
+    static byte[] getPrivKeyFromPassphrase(byte[] encryptedPassphrase, byte[] key) throws BlockIOException {
+        byte[] passphrase = decryptPassphrase(encryptedPassphrase, key);
+        try {
+            return getPrivKey(fromHex(new String(passphrase, "UTF-8")));
         } catch (UnsupportedEncodingException e) {
             throw new BlockIOException("Your system does not seem to support UTF-8 encoding! Aborting signing process.");
         }
