@@ -88,7 +88,7 @@ public class SigningUtilsTest extends TestCase {
     public void testFromFile() throws Exception {
         String request = new String( Files.readAllBytes(Paths.get(SigningUtilsTest.class.getResource("sample_signing_request.json").toURI())));
         String response = new String( Files.readAllBytes(Paths.get(SigningUtilsTest.class.getResource("sample_signing_response.json").toURI())));
-        Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         Response.ResponseWithdrawSignRequest signResquestR = gson.fromJson(request, Response.ResponseWithdrawSignRequest.class);
         WithdrawSignRequest signResquest = signResquestR.withdrawSignRequest;
 
