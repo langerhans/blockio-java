@@ -13,5 +13,5 @@ public class Balance {
     public String availableBalance;
 
     @SerializedName("pending_received_balance")
-    public String pedingReceivedBalance;
+    public String pendingReceivedBalance;
 }
